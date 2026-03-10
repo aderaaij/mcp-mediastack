@@ -30,10 +30,12 @@ SERVICES = {
     "prowlarr": {
         "port": int(os.environ.get("PROWLARR_PORT", 9696)),
         "api_key": os.environ.get("PROWLARR_API_KEY", ""),
+        "api_version": "v1",
     },
     "readarr": {
         "port": int(os.environ.get("READARR_PORT", 8787)),
         "api_key": os.environ.get("READARR_API_KEY", ""),
+        "api_version": "v1",
     },
     "bazarr": {
         "port": int(os.environ.get("BAZARR_PORT", 6767)),
@@ -118,25 +120,29 @@ async def _put(port: int, path: str, headers: dict | None = None, json_data: Any
 async def _arr_get(service: str, path: str) -> dict | list | str:
     """GET request to an *arr service (Sonarr, Radarr, etc.)."""
     cfg = SERVICES[service]
-    return await _get(cfg["port"], f"/api/v3{path}", headers={"X-Api-Key": cfg["api_key"]})
+    api_ver = cfg.get("api_version", "v3")
+    return await _get(cfg["port"], f"/api/{api_ver}{path}", headers={"X-Api-Key": cfg["api_key"]})
 
 
 async def _arr_post(service: str, path: str, json_data: Any = None) -> dict | list | str:
     """POST request to an *arr service."""
     cfg = SERVICES[service]
-    return await _post(cfg["port"], f"/api/v3{path}", headers={"X-Api-Key": cfg["api_key"]}, json_data=json_data)
+    api_ver = cfg.get("api_version", "v3")
+    return await _post(cfg["port"], f"/api/{api_ver}{path}", headers={"X-Api-Key": cfg["api_key"]}, json_data=json_data)
 
 
 async def _arr_delete(service: str, path: str, params: dict | None = None) -> dict | list | str:
     """DELETE request to an *arr service."""
     cfg = SERVICES[service]
-    return await _delete(cfg["port"], f"/api/v3{path}", headers={"X-Api-Key": cfg["api_key"]}, params=params)
+    api_ver = cfg.get("api_version", "v3")
+    return await _delete(cfg["port"], f"/api/{api_ver}{path}", headers={"X-Api-Key": cfg["api_key"]}, params=params)
 
 
 async def _arr_put(service: str, path: str, json_data: Any = None) -> dict | list | str:
     """PUT request to an *arr service."""
     cfg = SERVICES[service]
-    return await _put(cfg["port"], f"/api/v3{path}", headers={"X-Api-Key": cfg["api_key"]}, json_data=json_data)
+    api_ver = cfg.get("api_version", "v3")
+    return await _put(cfg["port"], f"/api/{api_ver}{path}", headers={"X-Api-Key": cfg["api_key"]}, json_data=json_data)
 
 
 def _fmt(data: Any) -> str:
@@ -666,10 +672,7 @@ async def get_prowlarr_status() -> str:
     status = await _arr_get("prowlarr", "/system/status")
     health = await _arr_get("prowlarr", "/health")
     try:
-        indexers = await _get(
-            SERVICES["prowlarr"]["port"], "/api/v1/indexer",
-            headers={"X-Api-Key": SERVICES["prowlarr"]["api_key"]},
-        )
+        indexers = await _arr_get("prowlarr", "/indexer")
         indexer_summary = [
             {"name": i.get("name"), "protocol": i.get("protocol"), "enable": i.get("enable")}
             for i in (indexers if isinstance(indexers, list) else [])
