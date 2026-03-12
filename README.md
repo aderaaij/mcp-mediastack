@@ -80,6 +80,16 @@ services:
 | `SEERR_API_KEY` | | Seerr API key |
 | `SEERR_PORT` | `5055` | Seerr port |
 | `GLUETUN_PORT` | `8005` | Gluetun control API port |
+| `ENABLED_SERVICES` | | Only load these services (comma-separated, e.g. `sonarr,radarr`) |
+| `DISABLED_SERVICES` | | Skip these services (comma-separated, e.g. `vpn,qbittorrent`) |
+
+### Selective tool loading
+
+Tools are automatically loaded based on which API keys are set. Only set the keys for the services you use — tools for unconfigured services won't be registered.
+
+- **API key services** (Sonarr, Radarr, Readarr, Prowlarr, Bazarr, SABnzbd, Seerr): enabled when their API key is non-empty
+- **qBittorrent and VPN**: enabled by default (no API key). Use `DISABLED_SERVICES=vpn,qbittorrent` to disable
+- **`ENABLED_SERVICES`**: override auto-detection with an explicit whitelist (e.g. `ENABLED_SERVICES=sonarr,radarr`)
 
 ## Tools
 
