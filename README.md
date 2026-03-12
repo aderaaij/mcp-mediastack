@@ -1,6 +1,6 @@
 # mcp-mediastack
 
-An [MCP](https://modelcontextprotocol.io/) server that provides 44 tools for monitoring and managing a Docker-based media stack. Built with [FastMCP](https://github.com/jlowin/fastmcp) and [httpx](https://www.python-httpx.org/).
+An [MCP](https://modelcontextprotocol.io/) server that provides 45 tools for monitoring and managing a Docker-based media stack. Built with [FastMCP](https://github.com/jlowin/fastmcp) and [httpx](https://www.python-httpx.org/).
 
 ## Supported Services
 
@@ -115,7 +115,7 @@ services:
 | `get_bazarr_wanted` | Missing subtitles |
 | `get_seerr_status` | Pending requests and stats |
 
-### Actions (16 tools)
+### Actions (17 tools)
 
 | Tool | Description |
 |---|---|
@@ -127,6 +127,7 @@ services:
 | `add_radarr_movie` | Add movie by TMDB ID |
 | `radarr_search_missing` | Trigger search for missing movies |
 | `radarr_remove_from_queue` | Remove stuck queue items |
+| `send_arr_command` | Send a command to Sonarr/Radarr/Readarr (e.g. RefreshSeries, CheckHealth) |
 | `sabnzbd_pause_resume` | Pause or resume SABnzbd |
 | `sabnzbd_delete_job` | Delete a download job |
 | `sabnzbd_retry_failed` | Retry a failed download |
