@@ -186,10 +186,10 @@ If the server is running on a remote host with SSE transport:
 uv sync
 
 # Run locally (stdio mode)
-python server.py
+python -m mcp_mediastack
 
 # Run locally (SSE mode)
-MCP_TRANSPORT=sse python server.py
+MCP_TRANSPORT=sse python -m mcp_mediastack
 ```
 
 ## License

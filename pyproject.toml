@@ -1,9 +1,39 @@
 [project]
 name = "mediastack-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "MCP server for monitoring Synology NAS media stack"
 requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.0.0",
     "httpx>=0.27.0",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.8.0",
+    "pre-commit>=4.0.0",
+]
+
+[project.scripts]
+mcp-mediastack = "mcp_mediastack.server:main"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "UP",  # pyupgrade (modern Python syntax)
+    "B",   # flake8-bugbear (common bugs)
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501", # line too long (handled by formatter)
+]
+
+[tool.ruff.format]
+quote-style = "double"
